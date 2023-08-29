@@ -5,10 +5,12 @@ let result = document.getElementById("result")
 
 let overwrite = false
 let finished = false
+let chosen = false
 let last_op = ''
 let operand = 0
 
 function changeRes(elem) {
+    chosen = true
     if (overwrite) {
         overwrite = false
         result.innerText = elem.target.innerText
@@ -18,7 +20,7 @@ function changeRes(elem) {
         }
     }
     else if (result.innerText.length < 13) {
-        result.innerText = result.innerText == '0' ? elem.target.innerText 
+        result.innerText = result.innerText == '0' ? elem.target.innerText
             : result.innerText + elem.target.innerText
     }
 }
@@ -42,7 +44,7 @@ document.getElementById("sign_button").addEventListener("click", e => {
     }
     if (result.innerText.includes('-')) {
         result.innerText = result.innerText.substring(1, result.innerText.length)
-    } else if (result.innerText != '0'){
+    } else if (result.innerText != '0') {
         result.innerText = '-' + result.innerText
     }
 })
@@ -77,48 +79,66 @@ document.getElementById("backspace_button").addEventListener("click", e => {
 })
 
 document.getElementById("plus_button").addEventListener("click", () => {
-    overwrite = true
-    finished = false
-    let res = calculate(last_op, operand, Number(result.innerText))
-    buffer.innerText = res + ' + '
-    operand = res
-    last_op = 'plus'
+    if (overwrite) {
+        buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' + '
+        last_op = 'plus'
+    } else {
+        overwrite = true
+        finished = false
+        chosen = false
+        let res = calculate(last_op, operand, Number(result.innerText))
+        buffer.innerText = res + ' + '
+        operand = res
+        last_op = 'plus'
+    }
 })
 
 document.getElementById("minus_button").addEventListener("click", () => {
-    overwrite = true
-    finished = false
-    let res = calculate(last_op, operand, Number(result.innerText))
-    buffer.innerText = res + ' - '
-    operand = res
-    last_op = 'minus'
+    if (overwrite) {
+        buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' - '
+        last_op = 'minus'
+    } else {
+        overwrite = true
+        finished = false
+        let res = calculate(last_op, operand, Number(result.innerText))
+        buffer.innerText = res + ' - '
+        operand = res
+        last_op = 'minus'
+    }
 })
 
 document.getElementById('times_button').addEventListener('click', () => {
-    overwrite = true
-    finished = false
-    let res = calculate(last_op, operand, Number(result.innerText))
-    buffer.innerText = res + ' * '
-    operand = res
-    last_op = 'times'
+    if (overwrite) {
+        buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' * '
+        last_op = 'times'
+    } else {
+        overwrite = true
+        finished = false
+        let res = calculate(last_op, operand, Number(result.innerText))
+        buffer.innerText = res + ' * '
+        operand = res
+        last_op = 'times'
+    }
 })
 
 document.getElementById("divide_button").addEventListener("click", () => {
-    overwrite = true
-    finished = false
-    let res = calculate(last_op, operand, Number(result.innerText))
-    buffer.innerText = res + ' / '
-    operand = res
-    last_op = 'div'
+    if (overwrite) {
+        buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' / '
+        last_op = 'div'
+    } else {
+        overwrite = true
+        finished = false
+        let res = calculate(last_op, operand, Number(result.innerText))
+        buffer.innerText = res + ' / '
+        operand = res
+        last_op = 'div'
+    }
 })
 
-function divideByZero() {
-    overwrite = true
-    finished = false
-}
-
 function parseNumber(num) {
-    if (Math.abs(num) < 10**13) {
+    if (Math.abs(num) < 1) {
+        return Number(num.toFixed(12))
+    } if (Math.abs(num) < 10 ** 13) {
         return Number(num.toFixed(2))
     } else {
         return Number(num.toPrecision(8))
@@ -153,11 +173,11 @@ document.getElementById("equals_button").addEventListener("click", () => {
         if (buffer.innerText == '0') {
             buffer.innerText = result.innerText + ' = '
         } else if (Number(result.innerText) >= 0) {
-            buffer.innerText =  buffer.innerText + ' ' + Number(result.innerText) + ' = '
+            buffer.innerText = buffer.innerText + ' ' + Number(result.innerText) + ' = '
         } else {
-            buffer.innerText =  buffer.innerText + ' (' + Number(result.innerText) + ') = '
+            buffer.innerText = buffer.innerText + ' (' + Number(result.innerText) + ') = '
         }
-        result.innerText = res 
+        result.innerText = res
         operand = 0
         overwrite = true
         finished = true
