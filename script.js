@@ -28,12 +28,18 @@ for (num_button of buttons) {
 }
 
 document.getElementById("dot_button").addEventListener("click", e => {
+    if (finished) {
+        return
+    }
     if (result.innerText.length < 13 && !result.innerText.includes('.')) {
         result.innerText = result.innerText + '.'
     }
 })
 
 document.getElementById("sign_button").addEventListener("click", e => {
+    if (finished) {
+        return
+    }
     if (result.innerText.includes('-')) {
         result.innerText = result.innerText.substring(1, result.innerText.length)
     } else if (result.innerText != '0'){
@@ -46,6 +52,8 @@ document.getElementById("ce_button").addEventListener("click", e => {
     if (finished) {
         buffer.innerText = '0'
     }
+    finished = false
+    overwrite = false
 })
 
 document.getElementById("c_button").addEventListener("click", e => {
@@ -53,6 +61,8 @@ document.getElementById("c_button").addEventListener("click", e => {
     buffer.innerText = '0'
     operand = 0
     last_op = ''
+    finished = false
+    overwrite = false
 })
 
 document.getElementById("backspace_button").addEventListener("click", e => {
@@ -68,44 +78,63 @@ document.getElementById("backspace_button").addEventListener("click", e => {
 
 document.getElementById("plus_button").addEventListener("click", () => {
     overwrite = true
+    finished = false
     let res = calculate(last_op, operand, Number(result.innerText))
     buffer.innerText = res + ' + '
     operand = res
     last_op = 'plus'
 })
 
-document.getElementById('minus_button').addEventListener("click", () => {
+document.getElementById("minus_button").addEventListener("click", () => {
     overwrite = true
+    finished = false
     let res = calculate(last_op, operand, Number(result.innerText))
-    buffer.innerText = res + ' + '
+    buffer.innerText = res + ' - '
     operand = res
-    last_op = 'plus'
+    last_op = 'minus'
+})
+
+document.getElementById('times_button').addEventListener('click', () => {
+
 })
 
 
 function calculate(op, buf, res) {
+    let temp = 0
     switch (op) {
         case 'plus':
-            return buf + res
+            temp = buf + res
+            break
         case 'minus':
-            return buf - res
+            temp = buf - res
+            break
         case 'times':
-            return buf * res
+            temp = buf * res
+            break
         case 'div':
-            return buf / res
+            temp = buf / res
+            break
         default:
-            return res
+            temp = res
+            break
     }
+    return Number(temp.toFixed(2))
 }
 
 document.getElementById("equals_button").addEventListener("click", () => {
     if (!finished) {
         let res = calculate(last_op, operand, Number(result.innerText))
-        buffer.innerText = buffer.innerText == '0' ?  result.innerText + ' = '
-         : buffer.innerText + ' ' + result.innerText + ' = '
+        if (buffer.innerText == '0') {
+            buffer.innerText = result.innerText + ' = '
+        } else if (Number(result.innerText) >= 0) {
+            buffer.innerText =  buffer.innerText + ' ' + Number(result.innerText) + ' = '
+        } else {
+            buffer.innerText =  buffer.innerText + ' (' + Number(result.innerText) + ') = '
+        }
         result.innerText = res
         operand = 0
         overwrite = true
         finished = true
+        last_op = ''
     }
 })
