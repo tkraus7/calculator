@@ -9,34 +9,28 @@ let chosen = false
 let last_op = ''
 let operand = 0
 
-function changeRes(elem) {
+function changeRes(text) {
     chosen = true
     if (overwrite) {
         overwrite = false
-        result.innerText = elem.target.innerText
+        result.innerText = text
         if (finished) {
             finished = false
             buffer.innerText = '0'
         }
     }
     else if (result.innerText.length < 13) {
-        result.innerText = result.innerText == '0' ? elem.target.innerText
-            : result.innerText + elem.target.innerText
+        result.innerText = result.innerText == '0' ? text : result.innerText + text
     }
 }
+
 
 for (num_button of buttons) {
-    num_button.addEventListener("click", changeRes)
+    num_button.addEventListener("click", e => {
+        changeRes(e.target.innerText)
+    })
 }
 
-document.getElementById("dot_button").addEventListener("click", e => {
-    if (finished) {
-        return
-    }
-    if (result.innerText.length < 13 && !result.innerText.includes('.')) {
-        result.innerText = result.innerText + '.'
-    }
-})
 
 document.getElementById("sign_button").addEventListener("click", e => {
     if (finished) {
@@ -67,19 +61,31 @@ document.getElementById("c_button").addEventListener("click", e => {
     overwrite = false
 })
 
-document.getElementById("backspace_button").addEventListener("click", e => {
+function dotHandler() {
     if (finished) {
         return
     }
+    if (result.innerText.length < 13 && !result.innerText.includes('.')) {
+        result.innerText = result.innerText + '.'
+    }
+}
+document.getElementById("dot_button").addEventListener("click", dotHandler)
+
+function backspaceHandler() {
+    if (finished) {
+        return
+    }
+    overwrite = false
     if (result.innerText.length == 1 || (result.innerText.length == 2 && result.innerText.charAt(0) == '-')) {
         result.innerText = '0'
     } else {
         result.innerText = result.innerText.substring(0, result.innerText.length - 1)
     }
-})
+}
+document.getElementById("backspace_button").addEventListener("click", backspaceHandler)
 
-document.getElementById("plus_button").addEventListener("click", () => {
-    if (overwrite) {
+function plusHandler() {
+    if (overwrite && !finished) {
         buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' + '
         last_op = 'plus'
     } else {
@@ -91,10 +97,11 @@ document.getElementById("plus_button").addEventListener("click", () => {
         operand = res
         last_op = 'plus'
     }
-})
+}
+document.getElementById("plus_button").addEventListener("click", plusHandler)
 
-document.getElementById("minus_button").addEventListener("click", () => {
-    if (overwrite) {
+function minusHandler() {
+    if (overwrite && !finished) {
         buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' - '
         last_op = 'minus'
     } else {
@@ -105,10 +112,11 @@ document.getElementById("minus_button").addEventListener("click", () => {
         operand = res
         last_op = 'minus'
     }
-})
+}
+document.getElementById("minus_button").addEventListener("click", minusHandler)
 
-document.getElementById('times_button').addEventListener('click', () => {
-    if (overwrite) {
+function timesHandler() {
+    if (overwrite && !finished) {
         buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' * '
         last_op = 'times'
     } else {
@@ -119,10 +127,11 @@ document.getElementById('times_button').addEventListener('click', () => {
         operand = res
         last_op = 'times'
     }
-})
+}
+document.getElementById('times_button').addEventListener('click', timesHandler)
 
-document.getElementById("divide_button").addEventListener("click", () => {
-    if (overwrite) {
+function divideHandler() {
+    if (overwrite && !finished) {
         buffer.innerText = buffer.innerText.substring(0, buffer.innerText.length - 2) + ' / '
         last_op = 'div'
     } else {
@@ -133,7 +142,8 @@ document.getElementById("divide_button").addEventListener("click", () => {
         operand = res
         last_op = 'div'
     }
-})
+}
+document.getElementById("divide_button").addEventListener("click", divideHandler)
 
 function parseNumber(num) {
     if (Math.abs(num) < 1) {
@@ -167,7 +177,7 @@ function calculate(op, buf, res) {
     return parseNumber(temp)
 }
 
-document.getElementById("equals_button").addEventListener("click", () => {
+function equalsHandler() {
     if (!finished) {
         let res = calculate(last_op, operand, Number(result.innerText))
         if (buffer.innerText == '0') {
@@ -183,4 +193,37 @@ document.getElementById("equals_button").addEventListener("click", () => {
         finished = true
         last_op = ''
     }
+}
+document.getElementById("equals_button").addEventListener("click", equalsHandler)
+
+document.addEventListener('keydown', e => {
+    document.activeElement.blur()
+    if (Number(e.key) >= 0 && Number(e.key) <= 9) {
+        changeRes(e.key)
+    } else {
+        switch (e.key) {
+            case '+':
+                plusHandler()
+                break;
+            case '-':
+                minusHandler()
+                break
+            case '*':
+                timesHandler()
+                break
+            case '/':
+                divideHandler()
+                break
+            case '.':
+                dotHandler()
+                break
+            case 'Backspace':
+                backspaceHandler()
+                break
+            case 'Enter':
+                equalsHandler()
+                break
+        }
+    }
 })
+
