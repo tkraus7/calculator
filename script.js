@@ -95,9 +95,21 @@ document.getElementById("minus_button").addEventListener("click", () => {
 })
 
 document.getElementById('times_button').addEventListener('click', () => {
-
+    overwrite = true
+    finished = false
+    let res = calculate(last_op, operand, Number(result.innerText))
+    buffer.innerText = res + ' * '
+    operand = res
+    last_op = 'times'
 })
 
+function parseNumber(num) {
+    if (Math.abs(num) < 10**13) {
+        return Number(num.toFixed(2))
+    } else {
+        return Number(num.toPrecision(8))
+    }
+}
 
 function calculate(op, buf, res) {
     let temp = 0
@@ -118,7 +130,7 @@ function calculate(op, buf, res) {
             temp = res
             break
     }
-    return Number(temp.toFixed(2))
+    return parseNumber(temp)
 }
 
 document.getElementById("equals_button").addEventListener("click", () => {
