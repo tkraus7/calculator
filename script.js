@@ -103,6 +103,20 @@ document.getElementById('times_button').addEventListener('click', () => {
     last_op = 'times'
 })
 
+document.getElementById("divide_button").addEventListener("click", () => {
+    overwrite = true
+    finished = false
+    let res = calculate(last_op, operand, Number(result.innerText))
+    buffer.innerText = res + ' / '
+    operand = res
+    last_op = 'div'
+})
+
+function divideByZero() {
+    overwrite = true
+    finished = false
+}
+
 function parseNumber(num) {
     if (Math.abs(num) < 10**13) {
         return Number(num.toFixed(2))
@@ -143,7 +157,7 @@ document.getElementById("equals_button").addEventListener("click", () => {
         } else {
             buffer.innerText =  buffer.innerText + ' (' + Number(result.innerText) + ') = '
         }
-        result.innerText = res
+        result.innerText = res 
         operand = 0
         overwrite = true
         finished = true
