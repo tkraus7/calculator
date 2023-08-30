@@ -94,7 +94,7 @@ function plusHandler() {
         chosen = false
         let res = calculate(last_op, operand, Number(result.innerText))
         buffer.innerText = res + ' + '
-        operand = res
+        operand = Number(res)
         last_op = 'plus'
     }
 }
@@ -109,7 +109,7 @@ function minusHandler() {
         finished = false
         let res = calculate(last_op, operand, Number(result.innerText))
         buffer.innerText = res + ' - '
-        operand = res
+        operand = Number(res)
         last_op = 'minus'
     }
 }
@@ -124,7 +124,7 @@ function timesHandler() {
         finished = false
         let res = calculate(last_op, operand, Number(result.innerText))
         buffer.innerText = res + ' * '
-        operand = res
+        operand = Number(res)
         last_op = 'times'
     }
 }
@@ -139,7 +139,7 @@ function divideHandler() {
         finished = false
         let res = calculate(last_op, operand, Number(result.innerText))
         buffer.innerText = res + ' / '
-        operand = res
+        operand = Number(res)
         last_op = 'div'
     }
 }
@@ -147,11 +147,11 @@ document.getElementById("divide_button").addEventListener("click", divideHandler
 
 function parseNumber(num) {
     if (Math.abs(num) < 1) {
-        return Number(num.toFixed(12))
-    } if (Math.abs(num) < 10 ** 13) {
-        return Number(num.toFixed(2))
+        return num.toFixed(12)
+    } else if (Math.abs(num) < 10 ** 13) {
+        return Number(num) == Number(num.toFixed(2)) ? num : num.toFixed(2)
     } else {
-        return Number(num.toPrecision(8))
+        return num.toPrecision(8)
     }
 }
 
