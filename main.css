@@ -4,12 +4,15 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    font-family: sans-serif;
+    font-family: 'Dosis', sans-serif;
+    background-image: url(numbers.avif);
 }
 
 .container {
     border: 3px solid black;
     border-radius: 3%;
+    background-color: lightgray;
+    padding: 10px;;
 }
 
 .calc_buttons {
@@ -17,6 +20,7 @@ body {
 }
 
 .screen {
+    background-color: white;
     margin: 10px;
     display: flex;
     flex-direction: column;
@@ -41,6 +45,7 @@ button {
     margin: 6px;
     border: 1px solid black;
     border-radius: 5%;
+    font-family: 'Dosis', sans-serif;
 }
 
 button:hover {

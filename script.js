@@ -5,12 +5,10 @@ let result = document.getElementById("result")
 
 let overwrite = false
 let finished = false
-let chosen = false
 let last_op = ''
 let operand = 0
 
 function changeRes(text) {
-    chosen = true
     if (overwrite) {
         overwrite = false
         result.innerText = text
@@ -91,7 +89,6 @@ function plusHandler() {
     } else {
         overwrite = true
         finished = false
-        chosen = false
         let res = calculate(last_op, operand, Number(result.innerText))
         buffer.innerText = res + ' + '
         operand = Number(res)
@@ -146,7 +143,7 @@ function divideHandler() {
 document.getElementById("divide_button").addEventListener("click", divideHandler)
 
 function parseNumber(num) {
-    if (Math.abs(num) < 1) {
+    if (Math.abs(num) < 1 && num > 0) {
         return num.toFixed(12)
     } else if (Math.abs(num) < 10 ** 13) {
         return Number(num) == Number(num.toFixed(2)) ? num : num.toFixed(2)
