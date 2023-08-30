@@ -194,12 +194,13 @@ function equalsHandler() {
 document.getElementById("equals_button").addEventListener("click", equalsHandler)
 
 let allButtons = document.getElementsByTagName('button')
+let hoverColor = 'rgb(170, 169, 169)'
 document.addEventListener('keydown', e => {
     document.activeElement.blur()
 
     for (b of allButtons) {
         if (e.key == b.innerText) {
-            b.style.backgroundColor = 'rgb(170, 169, 169)'
+            b.style.backgroundColor = hoverColor
         }
     }
 
@@ -208,24 +209,31 @@ document.addEventListener('keydown', e => {
     } else {
         switch (e.key) {
             case '+':
+                document.getElementById('plus_button').style.backgroundColor = hoverColor
                 plusHandler()
                 break;
             case '-':
+                document.getElementById('minus_button').style.backgroundColor = hoverColor
                 minusHandler()
                 break
             case '*':
+                document.getElementById('times_button').style.backgroundColor = hoverColor
                 timesHandler()
                 break
             case '/':
+                document.getElementById('divide_button').style.backgroundColor = hoverColor
                 divideHandler()
                 break
             case '.':
+                document.getElementById('dot_button').style.backgroundColor = hoverColor
                 dotHandler()
                 break
             case 'Backspace':
+                document.getElementById('backspace_button').style.backgroundColor = hoverColor
                 backspaceHandler()
                 break
             case 'Enter':
+                document.getElementById('equals_button').style.backgroundColor = hoverColor
                 equalsHandler()
                 break
         }
