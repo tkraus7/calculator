@@ -38,6 +38,7 @@ body {
 }
 
 button {
+    background-color: white;
     min-width: 70px;
     min-height: 50px;
     font-size: 20px;

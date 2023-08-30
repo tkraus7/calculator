@@ -193,8 +193,16 @@ function equalsHandler() {
 }
 document.getElementById("equals_button").addEventListener("click", equalsHandler)
 
+let allButtons = document.getElementsByTagName('button')
 document.addEventListener('keydown', e => {
     document.activeElement.blur()
+
+    for (b of allButtons) {
+        if (e.key == b.innerText) {
+            b.style.backgroundColor = 'rgb(170, 169, 169)'
+        }
+    }
+
     if (Number(e.key) >= 0 && Number(e.key) <= 9) {
         changeRes(e.key)
     } else {
@@ -221,6 +229,12 @@ document.addEventListener('keydown', e => {
                 equalsHandler()
                 break
         }
+    }
+})
+
+document.addEventListener('keyup', e => {
+    for (b of allButtons) {
+        b.style.backgroundColor = 'white'
     }
 })
 
